@@ -1,9 +1,9 @@
 import sys
-from is_valid_keys import is_valid_keys
+from .is_valid_keys import is_valid_keys
 
 
-def read_configuration(path: str) -> dict:
-    configuration: dict = {}
+def read_configuration(path: str) -> dict[str, str] | None:
+    configuration: dict[str, str] = {}
     try:
         with open(path, "r") as file:
             for line in file:

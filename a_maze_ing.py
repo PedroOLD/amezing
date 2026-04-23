@@ -1,9 +1,10 @@
 import sys
 from utils.read_configuration import read_configuration
+# from algorithm.recursive_backtracking import backtracking
 
 
-def main():
-    values_config: dict
+def main() -> None:
+    values_config: dict[str, str] | None = None
     if (len(sys.argv) != 2):
         print("Error need the file for generate")
         return
