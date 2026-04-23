@@ -67,6 +67,10 @@ class backtracking():
         else:
             pass
 
+    def add_42_maze(self):
+        current_maze = self.generate()
+        print(f"{current_maze}")
+
 
 class Directions(Enum):
     UP = 1
