@@ -141,11 +141,11 @@ class backtracking():
                     # moves recursively
                     self.generate(next_cell_x, next_cell_y, grid)
 
-    def add_42_maze(self):
+    def add_42_maze(self) -> None:
         if (self.maze is not None):
             coord_x = self.width // 2
             coord_y = self.height // 2
-            offsets: list[tuple[float, float]] = [
+            offsets: list[tuple[int, int]] = [
                 (-2, -3),
                 (-1, -3),
                 (0, -3),
