@@ -1,5 +1,5 @@
 import sys
-from utils import read_configuration
+from utils import read_configuration, Cell
 from dataclasses import dataclass
 from algorithm import backtracking
 
@@ -37,7 +37,15 @@ def main() -> None:
                         valuesReceiver.height,
                         valuesReceiver.path)
     test.create_maze()
-    print(f"{test.maze}! \n")
+    new_cell = Cell(1, 0, 1, 1)
+    new_cell.create_bit_cell()
+    print(f"{new_cell.cell_version_hex} aqui \n")
+
+    linhas_ascii = new_cell.get_ascii_repre(wall_color="\033[32m")
+
+    print("Visualização da Célula:")
+    for linha in linhas_ascii:
+        print(linha)
 
 
 if __name__ == "__main__":

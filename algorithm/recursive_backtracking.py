@@ -169,8 +169,6 @@ class backtracking():
             ]
             for dy, dx in offsets:
                 self.maze[coord_y + dy, coord_x + dx] = 0
-            print(f"célula: [{coord_y - 2}, {coord_x + 3}]")
-            print(f"{self.maze} \n")
 
 
 # remembering which number is up, and which one is down isn’t optimal
