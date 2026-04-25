@@ -38,6 +38,7 @@ def main() -> None:
                         valuesReceiver.path)
 
     test.create_maze()
+    # print(f"{test.maze}! \n")
     new_cell = Cell(1, 1, 1, 1, 1)
     print("Visualização da Célula:")
     new_cell.show_type_cell()
