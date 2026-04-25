@@ -36,16 +36,13 @@ def main() -> None:
     test = backtracking(valuesReceiver.width,
                         valuesReceiver.height,
                         valuesReceiver.path)
+
     test.create_maze()
-    new_cell = Cell(1, 0, 1, 1)
-    new_cell.create_bit_cell()
-    print(f"{new_cell.cell_version_hex} aqui \n")
-
-    linhas_ascii = new_cell.get_ascii_repre(wall_color="\033[32m")
-
+    new_cell = Cell(1, 1, 1, 1, 1)
     print("Visualização da Célula:")
-    for linha in linhas_ascii:
-        print(linha)
+    new_cell.show_type_cell()
+    new_cell.set_bit_cell(1, 0, 0, 0, 0)
+    new_cell.show_type_cell()
 
 
 if __name__ == "__main__":

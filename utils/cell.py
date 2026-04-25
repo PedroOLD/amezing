@@ -1,11 +1,17 @@
 class Cell():
-    def __init__(self, west: int, south: int, east: int, north: int):
+    def __init__(self,
+                 west: int,
+                 south: int,
+                 east: int,
+                 north: int,
+                 type: int):
         self._west: int = west
         self._south: int = south
         self._east: int = east
         self._north: int = north
         self._bit_cell: list[int] = []
         self.cell_version_hex: str | None = None
+        self._type_cell = type
 
     def create_bit_cell(self) -> str | None:
         self._generate_list_bit_initial()
@@ -20,12 +26,38 @@ class Cell():
            and self._north is not None):
             self._bit_cell[self._west, self._south, self._east, self._north]
 
-    def set_bit_cell(self, west: int, south: int, east: int, north: int):
+    def set_bit_cell(self,
+                     west: int,
+                     south: int,
+                     east: int,
+                     north: int,
+                     type: int):
         self._west = west
         self._south = south
         self._east = east
         self._north = north
+        self._type_cell = type
         self.create_bit_cell()
+
+    def show_type_cell(self):
+        #  1 parede - 2 42 - 0.5 - passagem - 0 - passagem
+        match self._type_cell:
+            case 1:
+                for linha in self.get_ascii_repre(wall_color="\033[34m",
+                                                  show_path=False):
+                    print(linha)
+            case 2:
+                for linha in self.get_ascii_repre(wall_color="\033[36m",
+                                                  show_path=False):
+                    print(linha)
+            case 0.5:
+                for linha in self.get_ascii_repre(wall_color="\033[90m",
+                                                  show_path=False):
+                    print(linha)
+            case 0:
+                for linha in self.get_ascii_repre(wall_color="\033[90m",
+                                                  show_path=False):
+                    print(linha)
 
     def translate_cell(self) -> str:
         """
@@ -33,7 +65,6 @@ class Cell():
 
         A tradução segue os pesos: Norte(1), Leste(2), Sul(4), Oeste(8). [1]
         """
-        # Se você usar sua lógica de atributos individuais:
         value = 0
         if self._west:
             value += 1  # Bit 0
@@ -44,10 +75,11 @@ class Cell():
         if self._north:
             value += 8  # Bit 3
 
-        # Converte para hexadecimal, remove '0x' e deixa em maiúsculo [1]
         return hex(value)[2:].upper()
 
-    def get_ascii_repre(self, wall_color: str = "\033[0m", show_path: bool = False) -> list[str]:
+    def get_ascii_repre(self,
+                        wall_color: str = "\033[0m",
+                        show_path: bool = False) -> list[str]:
         """
         Retorna a representação visual com o centro sólido e colorido.
         As bordas (paredes) são representadas por caracteres ASCII simples.
@@ -55,7 +87,7 @@ class Cell():
         reset = "\033[0m"
         # O bloco sólido que antes ficava nas paredes, agora vai para o centro
         solid_center = "\u2588\u2588\u2588"
-        empty_center = "   "
+        #  empty_center = "   "
 
         # Cores para elementos especiais do subject [3]
         path_color = "\033[94m"    # Azul para o caminho
