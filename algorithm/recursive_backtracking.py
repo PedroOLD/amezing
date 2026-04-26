@@ -2,6 +2,8 @@ import numpy as np
 from enum import Enum
 import random
 from utils import Cell
+import sys
+sys.setrecursionlimit(10000)
 
 
 class backtracking(Cell):
@@ -26,13 +28,7 @@ class backtracking(Cell):
                     maze[i, j] = 1
         self.maze = maze
         self.add_42_maze()
-        print("MESH BEFORE\n")
-        print(self.maze)
-        print("\n")
         self.generate(1, 1, self.maze)
-        print("MESH AFTER\n")
-        print(self.maze)
-        print("\n")
         self.generate_final_maze()
 
     def generate(self, coord_x, coord_y, grid):
