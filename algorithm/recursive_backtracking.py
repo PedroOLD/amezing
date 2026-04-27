@@ -28,8 +28,13 @@ class backtracking(Cell):
                     maze[i, j] = 1
         self.maze = maze
         self.add_42_maze()
+        print("\n")
+        print(self.maze)
+        print("\n")
         self.generate(1, 1, self.maze)
-        self.generate_final_maze()
+        maze_lines = self.generate_final_maze()
+        for line in maze_lines:
+            print(line)
 
     def generate(self, coord_x, coord_y, grid):
         grid[coord_y, coord_x] = 0.5
@@ -72,13 +77,14 @@ class backtracking(Cell):
 
                 if (0 <= next_cell_x < self.width and
                    0 <= next_cell_y < self.height and
-                   grid[next_cell_y, next_cell_x] != 0.5):
+                   grid[next_cell_y, next_cell_x] != 0.5 and
+                   grid[next_cell_y, next_cell_x] != 2):
                     grid[middle_cell_y, middle_cell_x] = 0
                     self.generate(next_cell_x, next_cell_y, grid)
 
     def is_visited(self, x, y, grid):
         if 0 < y < self.height and 0 < x < self.width:
-            return grid[y, x] == 0.5
+            return grid[y, x] == 0.5 or grid[y, x] == 2
         return True
 
     def add_42_maze(self) -> None:
@@ -87,22 +93,38 @@ class backtracking(Cell):
             coord_y = self.height // 2
             offsets: list[tuple[int, int]] = [
                 (-5, -5),
+                (-4, -5),
                 (-3, -5),
+                (-2, -5),
                 (-1, -5),
+                (-1, -4),
                 (-1, -3),
+                (-1, -2),
                 (-1, -1),
+                (0, -1),
                 (1, -1),
+                (2, -1),
                 (3, -1),
                 (-5, 1),
+                (-5, 2),
                 (-5, 3),
+                (-5, 4),
                 (-5, 5),
+                (-4, 5),
                 (-3, 5),
+                (-2, 5),
                 (-1, 5),
+                (-1, 4),
                 (-1, 3),
+                (-1, 2),
                 (-1, 1),
+                (0, 1),
                 (1, 1),
+                (2, 1),
                 (3, 1),
+                (3, 2),
                 (3, 3),
+                (3, 4),
                 (3, 5),
             ]
             for dy, dx in offsets:
@@ -112,37 +134,25 @@ class backtracking(Cell):
         final_output = []
 
         for y in range(self.height):
-            # cada célula tem 3 linhas
-            row_lines = ["", "", ""]
-
+            line = ""
             for x in range(self.width):
                 valor = self.maze[y, x]
 
-                # cria uma célula NOVA (importante!)
-                cell = Cell(1, 0, 0, 0, valor)
-                cell.create_bit_cell()
-                
                 if valor == 1:
-                    color = "\033[34m"   # parede (azul)
+                    color = "\033[48;2;237;180;161m"
                 elif valor == 2:
-                    color = "\033[36m"   # 42 (ciano)
+                    color = "\033[48;2;118;68;98m"
                 elif valor == 0.5:
-                    color = "\033[90m"   # visitado
+                    color = "\033[48;2;44;33;55m"
                 else:
-                    color = "\033[90m"   # caminho normal
+                    color = "\033[48;2;44;33;55m"
+                # color for entry and exit or path idk "\033[48;2;169;104;104m"
 
-                ascii_cell = cell.get_ascii_repre(wall_color=color)
+                line += f"{color}  \033[0m"  # two spaces + reset
 
-                # junta horizontalmente
-                for i in range(3):
-                    row_lines[i] += ascii_cell[i]
+            final_output.append(line)
 
-            # adiciona as 3 linhas no output final
-            final_output.extend(row_lines)
-
-        # print final
-        for line in final_output:
-            print(line)
+        return final_output
 
 
 class Directions(Enum):
