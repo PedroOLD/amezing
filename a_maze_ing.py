@@ -55,9 +55,7 @@ def main() -> None:
         display_maze=parse_bool(values_config['DISPLAY_MAZE']),
         seed=str(values_config['SEED'])
     )
-    if (valuesReceiver.seed == "false" or
-       valuesReceiver.seed == "" or
-       valuesReceiver.seed == "False"):
+    if (valuesReceiver.seed == ""):
         random.seed()
     else:
         random.seed(valuesReceiver.seed)
@@ -66,7 +64,8 @@ def main() -> None:
                         valuesReceiver.path,
                         valuesReceiver.display_maze,
                         valuesReceiver.entry,
-                        valuesReceiver.entry)
+                        valuesReceiver.entry,
+                        valuesReceiver.perfect)
 
     test.create_maze()
 

@@ -13,7 +13,8 @@ class backtracking(Cell):
                  path: str,
                  display_map: bool,
                  entry: tuple,
-                 exit: tuple):
+                 exit: tuple,
+                 perfect: bool):
         if (width % 2 == 0):
             width += 1
         if (height % 2 == 0):
@@ -25,6 +26,7 @@ class backtracking(Cell):
         self.display_map = display_map
         self.entry = entry
         self.exit = exit
+        self.perfect = perfect
         self._cell = Cell(1, 1, 1, 1, 1)
 
     def create_maze(self):
