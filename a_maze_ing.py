@@ -2,6 +2,7 @@ import sys
 from utils import read_configuration
 from dataclasses import dataclass
 from algorithm import backtracking
+import random
 
 """
 Add Decorator DataClasss on a Class. He help us add the propieties Class for
@@ -34,6 +35,7 @@ def main() -> None:
         height=int(values_config["HEIGHT"]),
         path=str(values_config["PERFECT"]),
     )
+    random.seed()
     test = backtracking(valuesReceiver.width,
                         valuesReceiver.height,
                         valuesReceiver.path)

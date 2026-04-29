@@ -3,13 +3,15 @@ from enum import Enum
 import random
 from utils import Cell
 import sys
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(100000000)
 
 
 class backtracking(Cell):
     def __init__(self, width: int, height: int, path):
-        width = (width * 2) + 1
-        height = (height * 2) + 1
+        if (width % 2 == 0):
+            width += 1
+        if (height % 2 == 0):
+            height += 1
 
         self.width = width
         self.height = height
@@ -28,9 +30,6 @@ class backtracking(Cell):
                     maze[i, j] = 1
         self.maze = maze
         self.add_42_maze()
-        print("\n")
-        print(self.maze)
-        print("\n")
         self.generate(1, 1, self.maze)
         maze_lines = self.generate_final_maze()
         for line in maze_lines:
@@ -78,7 +77,8 @@ class backtracking(Cell):
                 if (0 <= next_cell_x < self.width and
                    0 <= next_cell_y < self.height and
                    grid[next_cell_y, next_cell_x] != 0.5 and
-                   grid[next_cell_y, next_cell_x] != 2):
+                   grid[next_cell_y, next_cell_x] != 2 and
+                   grid[middle_cell_y, middle_cell_x] != 2):
                     grid[middle_cell_y, middle_cell_x] = 0
                     self.generate(next_cell_x, next_cell_y, grid)
 
