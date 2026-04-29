@@ -39,7 +39,6 @@ class Cell():
         self._type_cell = type
         self.create_bit_cell()
 
-
     def translate_cell(self) -> str:
         """
         Traduz a presença de paredes para um dígito hexadecimal (0-F).

@@ -1,5 +1,5 @@
 import sys
-from utils import read_configuration, Cell
+from utils import read_configuration
 from dataclasses import dataclass
 from algorithm import backtracking
 
@@ -28,6 +28,7 @@ def main() -> None:
     # This function get and return a Dict with the configs
     values_config = read_configuration(sys.argv[1])
     # Use the ValueConfig class
+    print(values_config)
     valuesReceiver = ValuesConfg(
         width=int(values_config["WIDTH"]),
         height=int(values_config["HEIGHT"]),
