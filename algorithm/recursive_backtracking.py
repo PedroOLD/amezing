@@ -7,7 +7,7 @@ sys.setrecursionlimit(100000000)
 
 
 class backtracking(Cell):
-    def __init__(self, width: int, height: int, path):
+    def __init__(self, width: int, height: int, path: str, display_map: bool):
         if (width % 2 == 0):
             width += 1
         if (height % 2 == 0):
@@ -16,6 +16,7 @@ class backtracking(Cell):
         self.width = width
         self.height = height
         self.path = path
+        self.display_map = display_map
         self._cell = Cell(1, 1, 1, 1, 1)
 
     def create_maze(self):
@@ -31,9 +32,12 @@ class backtracking(Cell):
         self.maze = maze
         self.add_42_maze()
         self.generate(1, 1, self.maze)
-        maze_lines = self.generate_final_maze()
-        for line in maze_lines:
-            print(line)
+        if (self.display_map):
+            maze_lines = self.generate_final_maze()
+            for line in maze_lines:
+                print(line)
+        else:
+            pass
 
     def generate(self, coord_x, coord_y, grid):
         grid[coord_y, coord_x] = 0.5

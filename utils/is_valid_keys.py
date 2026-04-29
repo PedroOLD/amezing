@@ -8,7 +8,8 @@ def is_valid_keys(configs: dict) -> bool:
         "ENTRY",
         "EXIT",
         "OUTPUT_FILE",
-        "PERFECT"
+        "PERFECT",
+        "DISPLAY_MAZE"
     }
     current_keys: Set[str] = set(configs.keys())
     missing_keys: Set[str] = mandatory_keys - current_keys

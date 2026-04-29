@@ -19,6 +19,14 @@ class ValuesConfg:
     width: int
     height: int
     path: str
+    display_maze: bool
+    perfect: bool
+    entry: tuple
+    exit: tuple
+
+
+def parse_bool(value: str) -> bool:
+    return value.strip().lower() in ("true", "1", "yes")
 
 
 def main() -> None:
@@ -34,14 +42,16 @@ def main() -> None:
         width=int(values_config["WIDTH"]),
         height=int(values_config["HEIGHT"]),
         path=str(values_config["OUTPUT_FILE"]),
-        perfect=bool(values_config['PERFECT']),
+        perfect=parse_bool(values_config['PERFECT']),
         entry=tuple(values_config['ENTRY']),
-        exit=tuple(values_config['EXIT'])
+        exit=tuple(values_config['EXIT']),
+        display_maze=parse_bool(values_config['DISPLAY_MAZE'])
     )
     random.seed()
     test = backtracking(valuesReceiver.width,
                         valuesReceiver.height,
-                        valuesReceiver.path)
+                        valuesReceiver.path,
+                        valuesReceiver.display_maze)
 
     test.create_maze()
 
