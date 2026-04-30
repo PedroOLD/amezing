@@ -34,7 +34,7 @@ def parse_bool(value: str) -> bool:
     return value.strip().lower() in ("true", "1", "yes")
 
 
-def main() -> None: 
+def main() -> None:
     """
 
     """
@@ -65,7 +65,8 @@ def main() -> None:
                          valuesReceiver.path,
                          valuesReceiver.display_maze,
                          valuesReceiver.entry,
-                         valuesReceiver.exit)
+                         valuesReceiver.exit,
+                         valuesReceiver.perfect)
 
     test.create_maze()
 
