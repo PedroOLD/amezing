@@ -64,7 +64,7 @@ def main() -> None:
                         valuesReceiver.path,
                         valuesReceiver.display_maze,
                         valuesReceiver.entry,
-                        valuesReceiver.entry,
+                        valuesReceiver.exit,
                         valuesReceiver.perfect)
 
     test.create_maze()

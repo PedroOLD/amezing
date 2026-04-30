@@ -15,6 +15,8 @@ class backtracking(Cell):
                  entry: tuple,
                  exit: tuple,
                  perfect: bool):
+        width *= 2
+        height *= 2
         if (width % 2 == 0):
             width += 1
         if (height % 2 == 0):
@@ -41,8 +43,11 @@ class backtracking(Cell):
                     maze[i, j] = 1
         self.maze = maze
         self.add_42_maze()
-        self._is_valid_position_set(self.exit)
         self.generate(1, 1, self.maze)
+        if not self._is_valid_position_set(self.entry):
+            print("ERROR: Entry position not available")
+        if not self._is_valid_position_set(self.exit):
+            print("ERROR: Exit position not available")
         if (self.display_map):
             maze_lines = self.generate_final_maze()
             for line in maze_lines:
@@ -173,10 +178,12 @@ class backtracking(Cell):
 
     def _is_valid_position_set(self, position: tuple[int, int]) -> bool:
         y, x = position
-        if (self.maze[y, x]):
-            print(self.maze[y, x])
+        x = (x * 2) + 1
+        y = (y * 2) + 1
+        if (y >= 0 and y < self.height - 1 and x >= 0 and x < self.width):
+            if (self.maze[y, x] == 2):
+                return False
             self.maze[y, x] = 3
-            print(self.maze[y, x])
             return True
         return False
 
