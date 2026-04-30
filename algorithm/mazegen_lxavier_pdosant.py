@@ -17,10 +17,10 @@ class MazeGenerator(Cell):
                  perfect: bool):
         width *= 2
         height *= 2
-        # if (width % 2 == 0):
-        #     width += 1
-        # if (height % 2 == 0):
-        #     height += 1
+        if (width % 2 == 0):
+            width += 1
+        if (height % 2 == 0):
+            height += 1
 
         self.width = width
         self.height = height
@@ -44,7 +44,10 @@ class MazeGenerator(Cell):
         self.maze = maze
         self.add_42_maze()
         self.generate(1, 1, self.maze)
-        self._is_valid_position_set(self.entry, self.exit)
+        if not self._is_valid_position_set(self.entry):
+            print("ERROR: Entry position not available")
+        if not self._is_valid_position_set(self.exit):
+            print("ERROR: Exit position not available")
         if (self.display_map):
             maze_lines = self.generate_final_maze()
             for line in maze_lines:
@@ -173,16 +176,14 @@ class MazeGenerator(Cell):
 
         return final_output
 
-    def _is_valid_position_set(self,
-                               position_entry: tuple[int, int],
-                               position_exit: tuple[int, int]
-                               ) -> bool:
-        y_entry, x_entry = position_entry
-        y_exit, x_exit = position_exit
-        if (self.maze[y_entry * 2, x_entry * 2] == 0.5
-           and self.maze[y_exit * 2, x_entry * 2] == 0.5):
-            self.maze[y_entry * 2, x_entry * 2] = 3
-            self.maze[y_exit * 2, x_exit * 2] = 3
+    def _is_valid_position_set(self, position: tuple[int, int]) -> bool:
+        y, x = position
+        x = (x * 2) + 1
+        y = (y * 2) + 1
+        if (y >= 0 and y < self.height - 1 and x >= 0 and x < self.width):
+            if (self.maze[y, x] == 2):
+                return False
+            self.maze[y, x] = 3
             return True
         return False
 
