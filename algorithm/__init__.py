@@ -1,1 +1,1 @@
-from .recursive_backtracking import backtracking # noqa F401
+from .recursive_backtracking import MazeGenerator # noqa F401

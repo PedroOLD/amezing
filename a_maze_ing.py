@@ -1,7 +1,7 @@
 import sys
 from utils import read_configuration
 from dataclasses import dataclass
-from algorithm import backtracking
+from algorithm import MazeGenerator
 import random
 
 """
@@ -33,7 +33,7 @@ def parse_bool(value: str) -> bool:
     return value.strip().lower() in ("true", "1", "yes")
 
 
-def main() -> None:
+def main() -> None: 
     """
 
     """
@@ -54,12 +54,12 @@ def main() -> None:
         display_maze=parse_bool(values_config['DISPLAY_MAZE'])
     )
     random.seed(42)
-    test = backtracking(valuesReceiver.width,
-                        valuesReceiver.height,
-                        valuesReceiver.path,
-                        valuesReceiver.display_maze,
-                        valuesReceiver.entry,
-                        valuesReceiver.exit)
+    test = MazeGenerator(valuesReceiver.width,
+                         valuesReceiver.height,
+                         valuesReceiver.path,
+                         valuesReceiver.display_maze,
+                         valuesReceiver.entry,
+                         valuesReceiver.exit)
 
     test.create_maze()
 
