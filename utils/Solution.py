@@ -1,29 +1,53 @@
 class Solution:
     def __init__(self, entry: tuple[int, int], exit: tuple[int, int], maze):
-        self._entry = entry
-        self._exit = exit
-        self._maze = maze
+        # entry/exit estão em coordenadas lógicas (linha, col)
+        # mas no maze real as células são (y*2+1, x*2+1)
+        ey, ex = entry
+        self._entry = (ey * 2 + 1, ex * 2 + 1)
+        zy, zx = exit
+        self._exit  = (zy * 2 + 1, zx * 2 + 1)
+        self._maze  = maze
+
+    def _neighbors(self, y, x):
+        """Retorna células vizinhas acessíveis (passo de 2, verifica parede do meio)."""
+        directions = [(-2, 0), (2, 0), (0, -2), (0, 2)]
+        result = []
+        for dy, dx in directions:
+            ny, nx = y + dy, x + dx
+            my, mx = y + dy // 2, x + dx // 2  # célula do meio (parede)
+            if (0 <= ny < self._maze.shape[0] and
+                0 <= nx < self._maze.shape[1] and
+                self._maze[my, mx] != 1 and   # parede entre as células
+                self._maze[ny, nx] != 1 and   # célula destino não é parede
+                self._maze[ny, nx] != 2):     # nem célula especial
+                result.append((ny, nx))
+        return result
 
     def bfs_resolver(self):
-        cost = 0
-        visited: list = []
-        possibles_positios: list = []
-        solution_router: list = []
+        from collections import deque
 
-        visited.append(self._entry)
-        possibles_positios.append(self._entry)
+        start = self._entry
+        end   = self._exit
 
-        while possibles_positios:
-            current_position = possibles_positios.pop(0)
+        # came_from rastreia o pai de cada célula visitada
+        came_from = {start: None}
+        queue = deque([start])
 
-            if current_position == self._exit:
-                solution_router.append(current_position)
-                return solution_router
+        while queue:
+            current = queue.popleft()
 
-            for neighbor in self.maze[current_position]:
-                if neighbor not in visited:
-                    possibles_positios.append(neighbor)
-                    visited.append(neighbor)
+            if current == end:
+                # reconstrói o caminho de trás pra frente
+                path = []
+                while current is not None:
+                    path.append(current)
+                    current = came_from[current]
+                path.reverse()
+                return path
 
-            cost += 1
-        return cost,
+            for neighbor in self._neighbors(*current):
+                if neighbor not in came_from:
+                    came_from[neighbor] = current
+                    queue.append(neighbor)
+
+        return []  # sem solução
