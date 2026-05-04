@@ -31,6 +31,7 @@ class MazeGenerator(Cell):
         self.perfect = perfect
         self._cell = Cell(1, 1, 1, 1, 1)
 
+
     def create_maze(self):
         maze = np.zeros((self.height, self.width), dtype=np.float64)
 
@@ -164,15 +165,13 @@ class MazeGenerator(Cell):
                 valor = self.maze[y, x]
 
                 if valor == 1:
-                    color = "\033[48;2;237;180;161m"
+                    color =  self._cell._color_wall
                 elif valor == 2:
                     color = "\033[48;2;118;68;98m"
                 elif valor == 0.5:
                     color = "\033[48;2;44;33;55m"
                 elif valor == 3:
                     color = "\033[48;2;169;104;104m"
-                elif valor == 4:
-                    color = "\033[48;2;100;200;150m"
                 else:
                     color = "\033[48;2;44;33;55m"
                 # color for entry and exit or path idk "\033[48;2;169;104;104m"

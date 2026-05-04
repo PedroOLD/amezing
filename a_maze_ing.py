@@ -4,15 +4,16 @@ from dataclasses import dataclass
 from algorithm import MazeGenerator
 import random
 
-"""
-Add Decorator DataClasss on a Class. He help us add the propieties Class for
-the use with the batter usebility
-Ex: Before DataClass
-    values_config["<NameProp>"]
-after DataClass
-    values_config.<nameProp>
-"""
-
+COLORS = {
+    "white":   "\033[97m",
+    "red":     "\033[91m",
+    "green":   "\033[92m",
+    "yellow":  "\033[93m",
+    "blue":    "\033[94m",
+    "magenta": "\033[95m",
+    "cyan":    "\033[96m",
+}
+RESET = "\033[0m"
 
 @dataclass
 class ValuesConfg:
@@ -34,17 +35,53 @@ def parse_bool(value: str) -> bool:
     return value.strip().lower() in ("true", "1", "yes")
 
 
-def main() -> None:
-    """
+def generate_maze(valuesReceiver, seed: str):
+    if valuesReceiver.seed == "":
+        random.seed()
+    else:
+        random.seed(valuesReceiver.seed)
 
-    """
-    # create the variable for to receiver values the file config
-    if (len(sys.argv) != 2):
+    gen = MazeGenerator(
+        valuesReceiver.width,
+        valuesReceiver.height,
+        valuesReceiver.path,
+        valuesReceiver.display_maze,
+        valuesReceiver.entry,
+        valuesReceiver.exit,
+        valuesReceiver.perfect
+    )
+    gen.create_maze()
+    return gen
+
+
+def apply_solution(gen, valuesReceiver):
+    solution = Solution(valuesReceiver.entry, valuesReceiver.exit, gen.maze)
+    resolution = solution.bfs_resolver()
+    if resolution is None:
+        return gen, None
+
+    for i, (y, x) in enumerate(resolution):
+        gen.maze[y, x] = 3
+        if i + 1 < len(resolution):
+            ny, nx = resolution[i + 1]
+            my, mx = resolution[i]
+            gen.maze[(y + ny) // 2, (x + nx) // 2] = 3
+            gen.maze[(y + my) // 2, (x + mx) // 2] = 3
+
+    return gen, resolution
+
+
+def display_maze(gen, maze_color):
+    gen._set_color_wall(maze_color)
+    print(RESET)
+
+
+def main() -> None:
+    if len(sys.argv) != 2:
         print("Error need the file for generate")
         return
-    # This function get and return a Dict with the configs
+
     values_config = read_configuration(sys.argv[1])
-    # Use the ValueConfig class
     valuesReceiver = ValuesConfg(
         width=int(values_config["WIDTH"]),
         height=int(values_config["HEIGHT"]),
@@ -55,58 +92,66 @@ def main() -> None:
         display_maze=parse_bool(values_config['DISPLAY_MAZE']),
         seed=str(values_config['SEED'])
     )
-    if (valuesReceiver.height < 6 and valuesReceiver.width < 7):
-        print("ERROR: Map Too Small. Min is 6 x 7.")
-        sys.exit()
 
-    if (valuesReceiver.seed == ""):
-        random.seed()
-    else:
-        random.seed(valuesReceiver.seed)
-    test = MazeGenerator(valuesReceiver.width,
-                         valuesReceiver.height,
-                         valuesReceiver.path,
-                         valuesReceiver.display_maze,
-                         valuesReceiver.entry,
-                         valuesReceiver.exit,
-                         valuesReceiver.perfect)
+    gen = generate_maze(valuesReceiver, valuesReceiver.seed)
+    show_solution = False
+    color_names = list(COLORS.keys())
+    color_index = 0
+    maze_color = COLORS[color_names[color_index]]
 
-    test.create_maze()
-    solution = Solution(valuesReceiver.entry, valuesReceiver.exit, test.maze)
 
-    # esta printando a solucao mas esta passando por cima do 42
+    gen._set_color_wall("033[92m")
+    gen._cell._set_color_wall("\033[92m")
+    display_maze(gen, maze_color)
 
-    resolution = solution.bfs_resolver()
+    while True:
+        print("=====  A-MAZE-ING  =====")
+        print("1) Regenerate a New Maze")
+        print(f"2) {'Hide' if show_solution else 'Show'} Solution")
+        print("3) Rotate Maze Colors")
+        print(f"0) Quit{RESET}\n")
 
-    for i, (y, x) in enumerate(resolution):
-        test.maze[y, x] = 3
-        if i + 1 < len(resolution):
-            ny, nx = resolution[i + 1]
-            my, mx = resolution[i]
-            test.maze[(y + ny) // 2, (x + nx) // 2] = 3
-            test.maze[(y + my) // 2, (x + mx) // 2] = 3
+        try:
+            raw = input(f"Choice from 0-3 \n $ {RESET}").strip()
+            choice = int(raw)
+        except ValueError:
+            print("\n[!] Invalid choice, please choose from 0-3")
+            continue
 
-    # imprime
-    if valuesReceiver.display_maze:
-        for line in test.generate_final_maze():
-            print(line)
-    else:
-        for row in test.generate_hexa_maze():
-            print(row, end="")
+        if not 0 <= choice <= 3:
+            print("\n[!] Invalid choice, please choose from 0-3")
+            continue
 
-    resolution = solution.bfs_resolver()
-    for idx in range(len(resolution) - 1):
-        cy, cx = resolution[idx]
-        ncy, ncx = resolution[idx + 1]
+        if choice == 1:
+            gen = generate_maze(valuesReceiver, valuesReceiver.seed)
+            show_solution = False
+            display_maze(gen, maze_color)
+            print("\n[+] Maze Regenerated!")
 
-        if (ncy > cy and ncx == cx):
-            print("S", end="")
-        elif (ncy < cy and ncx == cx):
-            print("N", end="")
-        elif (ncy == cy and ncx > cx):
-            print("E", end="")
-        elif (ncy == cy and ncx < cx):
-            print("W", end="")
+        elif choice == 2:
+            show_solution = not show_solution
+            gen = generate_maze(valuesReceiver, valuesReceiver.seed)
+            if show_solution:
+                gen, resolution = apply_solution(gen, valuesReceiver)
+                if resolution is None:
+                    print("\n[!] No solution found!")
+                    show_solution = False
+                else:
+                    display_maze(gen, maze_color)
+                    print(f"\n[+] Solution Shown!")
+            else:
+                display_maze(gen, maze_color)
+                print(f"\n[+] Solution Hidden!")
+
+        elif choice == 3:
+            color_index = (color_index + 1) % len(color_names)
+            maze_color = COLORS[color_names[color_index]]
+            display_maze(gen, maze_color)
+            print(f"\n[+] Color changed to {color_names[color_index]}!")
+
+        elif choice == 0:
+            print(f"{RESET}Quitting...")
+            break
 
 
 if __name__ == "__main__":
