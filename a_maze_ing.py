@@ -73,28 +73,40 @@ def main() -> None:
 
     test.create_maze()
     solution = Solution(valuesReceiver.entry, valuesReceiver.exit, test.maze)
-    
-    # esta printando a solucao mas esta passando por cima do 42 
-    
-    # resolution = solution.bfs_resolver()
-    
-    # for i, (y, x) in enumerate(resolution):
-    #     test.maze[y, x] = 0
-    #     if i + 1 < len(resolution):
-    #         ny, nx = resolution[i + 1]
-    #         test.maze[(y + ny) // 2, (x + nx) // 2] = 0
 
-    # # imprime
-    # if valuesReceiver.display_maze:
-    #     for line in test.generate_final_maze():
-    #         print(line)
-    # else:
-    #     for row in test.generate_hexa_maze():
-    #         print(row, end="")
-    
+    # esta printando a solucao mas esta passando por cima do 42
 
     resolution = solution.bfs_resolver()
-    print(resolution)
+
+    for i, (y, x) in enumerate(resolution):
+        test.maze[y, x] = 3
+        if i + 1 < len(resolution):
+            ny, nx = resolution[i + 1]
+            my, mx = resolution[i]
+            test.maze[(y + ny) // 2, (x + nx) // 2] = 3
+            test.maze[(y + my) // 2, (x + mx) // 2] = 3
+
+    # imprime
+    if valuesReceiver.display_maze:
+        for line in test.generate_final_maze():
+            print(line)
+    else:
+        for row in test.generate_hexa_maze():
+            print(row, end="")
+
+    resolution = solution.bfs_resolver()
+    for idx in range(len(resolution) - 1):
+        cy, cx = resolution[idx]
+        ncy, ncx = resolution[idx + 1]
+
+        if (ncy > cy and ncx == cx):
+            print("S", end="")
+        elif (ncy < cy and ncx == cx):
+            print("N", end="")
+        elif (ncy == cy and ncx > cx):
+            print("E", end="")
+        elif (ncy == cy and ncx < cx):
+            print("W", end="")
 
 
 if __name__ == "__main__":

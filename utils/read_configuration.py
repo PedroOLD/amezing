@@ -2,7 +2,7 @@ import sys
 from .is_valid_keys import is_valid_keys
 
 """
-Function for the read file that receive in sys.args 
+Function for the read file that receive in sys.args
 
 The function return a Dict[str, str].
 If the mmandatory fields no has in the file the program is stop

@@ -6,6 +6,6 @@ build-backend = "setuptools.build_meta"
 name = "recursive_backtracking"
 version = "1.0.0"
 dependencies = [
-    "numpy>=2.4.4",
+    "numpy<2.0",
 ]
 

@@ -172,7 +172,7 @@ class MazeGenerator(Cell):
                 elif valor == 3:
                     color = "\033[48;2;169;104;104m"
                 elif valor == 4:
-                    color = "\033[48;2;100;200;150m" 
+                    color = "\033[48;2;100;200;150m"
                 else:
                     color = "\033[48;2;44;33;55m"
                 # color for entry and exit or path idk "\033[48;2;169;104;104m"
