@@ -19,7 +19,6 @@ class ValuesConfg:
     width: int
     height: int
     path: str
-    display_maze: bool
     perfect: bool
     entry: tuple
     exit: tuple
@@ -52,7 +51,6 @@ def main() -> None:
         perfect=parse_bool(values_config['PERFECT']),
         entry=entry_tuples(values_config['ENTRY']),
         exit=entry_tuples(values_config['EXIT']),
-        display_maze=parse_bool(values_config['DISPLAY_MAZE']),
         seed=str(values_config['SEED'])
     )
     if (valuesReceiver.height < 6 and valuesReceiver.width < 7):
@@ -66,7 +64,6 @@ def main() -> None:
     test = MazeGenerator(valuesReceiver.width,
                          valuesReceiver.height,
                          valuesReceiver.path,
-                         valuesReceiver.display_maze,
                          valuesReceiver.entry,
                          valuesReceiver.exit,
                          valuesReceiver.perfect)
@@ -87,26 +84,20 @@ def main() -> None:
             test.maze[(y + my) // 2, (x + mx) // 2] = 3
 
     # imprime
-    if valuesReceiver.display_maze:
-        for line in test.generate_final_maze():
-            print(line)
-    else:
-        for row in test.generate_hexa_maze():
-            print(row, end="")
+    for line in test.generate_final_maze():
+        print(line)
 
     resolution = solution.bfs_resolver()
-    for idx in range(len(resolution) - 1):
-        cy, cx = resolution[idx]
-        ncy, ncx = resolution[idx + 1]
-
-        if (ncy > cy and ncx == cx):
-            print("S", end="")
-        elif (ncy < cy and ncx == cx):
-            print("N", end="")
-        elif (ncy == cy and ncx > cx):
-            print("E", end="")
-        elif (ncy == cy and ncx < cx):
-            print("W", end="")
+    with open(valuesReceiver.path, "a") as f:
+        for (cy, cx), (ncy, ncx) in zip(resolution, resolution[1:]):
+            if (ncy > cy and ncx == cx):
+                f.write("S")
+            elif (ncy < cy and ncx == cx):
+                f.write("N")
+            elif (ncy == cy and ncx > cx):
+                f.write("E")
+            elif (ncy == cy and ncx < cx):
+                f.write("W")
 
 
 if __name__ == "__main__":

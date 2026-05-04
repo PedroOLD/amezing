@@ -11,7 +11,6 @@ class MazeGenerator(Cell):
                  width: int,
                  height: int,
                  path: str,
-                 display_map: bool,
                  entry: tuple,
                  exit: tuple,
                  perfect: bool):
@@ -25,7 +24,6 @@ class MazeGenerator(Cell):
         self.width = width
         self.height = height
         self.path = path
-        self.display_map = display_map
         self.entry = entry
         self.exit = exit
         self.perfect = perfect
@@ -52,13 +50,22 @@ class MazeGenerator(Cell):
         if not self._is_valid_position_set(self.exit):
             print("ERROR: Exit position not available")
             sys.exit()
-        if (self.display_map):
-            maze_lines = self.generate_final_maze()
-            for line in maze_lines:
-                print(line)
-        else:
-            for row in self.generate_hexa_maze():
-                print(row, end="")
+        maze = self.generate_hexa_maze()
+        with open(self.path, "w") as f:
+            for row in maze:
+                f.write(row)
+            f.write("\n")
+            x, y = self.entry
+            f.write(f"{x},{y}")
+            f.write("\n")
+            x, y = self.exit
+            f.write(f"{x},{y}")
+            f.write("\n")
+            x, y = self.entry
+
+        maze_lines = self.generate_final_maze()
+        for line in maze_lines:
+            print(line)
 
     def generate(self, coord_x, coord_y, grid):
         grid[coord_y, coord_x] = 0.5
