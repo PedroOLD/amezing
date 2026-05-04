@@ -93,10 +93,6 @@ class MazeGenerator(Cell):
             f.write("\n")
             x, y = self.entry
 
-        maze_lines = self.generate_final_maze("\033[48;2;50;180;180m")
-        for line in maze_lines:
-            print(line)
-
     def generate(self, coord_x, coord_y, grid):
         """
         Recursively carve paths in the maze using depth-first search.
