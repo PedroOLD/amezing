@@ -135,7 +135,7 @@ def main() -> None:
         seed=str(values_config['SEED'])
     )
 
-    if (values_receiver.entry < 7 or values_receiver < 6):
+    if (values_receiver.width < 7 or values_receiver.height < 6):
         print("The size too small")
         sys.exit()
 
