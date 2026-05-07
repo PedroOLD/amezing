@@ -73,16 +73,13 @@ def apply_solution(gen, valuesReceiver) -> tuple[
     """
         função que aplica a solução do labirito chamando a Class Solution.
         A class recebe valor de entrada e valor e o maze
-        e usar a função bfs_resolver para concluir. 
-
+        e usar a função bfs_resolver para concluir.
         Essa função usa o algoritimo de bfs para resolver o labirinto,
         e ele retorna um lista
         de tuplas para indicando o caminho.
-
         pegamos o maze e usamos a nossa lista indicando a posiçao dos
-        caminhos para 
+        caminhos para
         mudar o valor das celular assim mudando a cor do caminho
-
     """
     solution = Solution(valuesReceiver.entry, valuesReceiver.exit, gen.maze)
     resolution = solution.bfs_resolver()
@@ -177,22 +174,24 @@ def main() -> None:
             gen.maze = copy.deepcopy(original_maze)
             if show_solution:
                 gen, resolution = apply_solution(gen, values_receiver)
-                with open(values_receiver.path, "a") as f:
-                    for (cy, cx), (ncy, ncx) in zip(resolution, resolution[1:]):
-                        if (ncy > cy and ncx == cx):
-                            f.write("S")
-                        elif (ncy < cy and ncx == cx):
-                            f.write("N")
-                        elif (ncy == cy and ncx > cx):
-                            f.write("E")
-                        elif (ncy == cy and ncx < cx):
-                            f.write("W")
-                if resolution is None:
-                    print("\n[!] No solution found!")
-                    show_solution = False
-                else:
-                    display_maze(gen, maze_color)
-                    print("\n[+] Solution Shown!")
+                if resolution:
+                    with open(values_receiver.path, "a") as f:
+                        for (cy, cx), (ncy, ncx) in zip(resolution,
+                                                        resolution[1:]):
+                            if (ncy > cy and ncx == cx):
+                                f.write("S")
+                            elif (ncy < cy and ncx == cx):
+                                f.write("N")
+                            elif (ncy == cy and ncx > cx):
+                                f.write("E")
+                            elif (ncy == cy and ncx < cx):
+                                f.write("W")
+                    if resolution is None:
+                        print("\n[!] No solution found!")
+                        show_solution = False
+                    else:
+                        display_maze(gen, maze_color)
+                        print("\n[+] Solution Shown!")
             else:
                 display_maze(gen, maze_color)
                 print("\n[+] Solution Hidden!")
